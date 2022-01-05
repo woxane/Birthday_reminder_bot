@@ -1,2 +1,5 @@
-# Birthday_reminder_bot
-just a telegram birthday reminder source :> . 
+# Birthday_reminder_bot 
+NOT FINISHED !
+
+TODO  : 
+[ ] : start
