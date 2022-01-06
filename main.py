@@ -36,9 +36,8 @@ def is_valid(Birthday) :
 @client.on(events.NewMessage(pattern = '/start')) 
 async def Start(event) :  
     markup = event.client.build_reply_markup([
-        [Button.text('Add Birthday date .')] , 
-        [Button.text('list of birthdays .')] , 
-        [Button.text('delete Birthday .')]])
+        [Button.text('Add Birthday date 🆕') , Button.text('list of birthdays 🎂📄')] , 
+        [Button.text('delete Birthday ❌')]])
 
     cursor.execute('SELECT user_id FROM Users')
     output = [user_id[0] for user_id in  cursor] #user_id[0] cause the output executed command is like this (1231235,)
