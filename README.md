@@ -5,6 +5,7 @@ TODO  :
 - [x] start 
 - [x] get the birthday from the user and add to db
 - [x] create is_valid function 
+- [x] handle error if the birthday list is empty 
 - [ ] add feature with can user edit the birthdays 
 - [ ] //     //    //  //  user delete birthdays 
 - [x] //     //    //  //  user see the list of birthdays 

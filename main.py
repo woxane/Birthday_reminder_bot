@@ -43,7 +43,7 @@ async def Start(event) :
     if event.message.chat_id in output :
         await event.respond("You're already started the bot !" , buttons = markup)
     else :
-        cursor.execute(f'INSERT INTO Users (user_id) VALUES(%s)' , (event.message.chat_id)) #if useres started the bot for the first time , we add the user_id to users table 
+        cursor.execute(f'INSERT INTO Users (user_id) VALUES({event.message.chat_id})') #if useres started the bot for the first time , we add the user_id to users table 
         await event.respond('Welcome !' , buttons = markup) 
 
 
@@ -57,7 +57,12 @@ async def Check(event) :
     elif event.raw_text == 'list of birthdays .' : 
         cursor.execute(f'SELECT * FROM Data WHERE user_id = {event.message.chat_id}') 
         Birthdays = [f'{i[1]} : {i[2].strftime("%Y/%m/%d")}' for i in cursor]  #i[1] is equal to name and the i[2] is equal to date time and i change the format with strftime
-        await client.send_message(event.chat_id , '\n'.join(Birthdays))        
+
+        if Birthdays :
+            await client.send_message(event.chat_id , '\n'.join(Birthdays))        
+    
+        else : 
+            await  client.send_message(event.chat_id , 'Your birtday list is empty !')
 
     elif Giving_Name == 1 :
         if event.raw_text.isalpha() :
