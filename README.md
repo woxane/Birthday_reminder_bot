@@ -2,4 +2,6 @@
 NOT FINISHED !
 
 TODO  :  
-- [ ] start 
+- [x] start 
+- [ ] get the birthday from the user and add to db
+
