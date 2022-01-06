@@ -30,7 +30,6 @@ Change_Name = 0
 
 
 def is_valid(Birthday) :
-    print(Birthday)
     Year , Month , Day = Birthday.split('/') 
     try :
         return datetime(int(Year) , int(Month) , int(Day))
@@ -164,14 +163,29 @@ async def Check(event) :
             await client.send_message(event.chat_id , 'this name is invalid !\n back to main menu .') 
             Change_Name = 0
 
+    elif Change_Birthday == 1 : 
+        Name , birthday = event.raw_text.split()
+        cursor.execute(f'SELECT name from Data WHERE user_id = {event.message.chat_id}')
+        Names = [i[0] for i in cursor]  # i[0] cause the output like this ('joe' ,)
+        if Name in Names :
+            if birthday := is_valid(birthday) :
+                Change_Birthday = 0  
+                cursor.execute("UPDATE Data SET birthday = (%s) WHERE user_id = (%s) AND name = (%s)" , (birthday , event.chat_id , Name))
+                await client.send_message(event.chat_id , 'Done ! ')
+
+            else :
+                Change_Birthday = 0  
+                await client.send_message(event.chat_id , 'the chosen birthday date is not valid . \n back to menu .')
+
+        else :
+            Change_Birthday = 0  
+            await client.send_message(event.chat_id , 'the chosen name is not in your list (or invalid)')
+
+
+
     else : 
         await client.send_message(event.chat_id , 'Please use the menu !')
-        Giving_Name = 0 
-        Giving_Birthday = 0
-        Deleting_Birthday = 0 
-        Change_Birthday = 0 
-        Change_Name = 0
-
+        
 
 
 @client.on(events.CallbackQuery()) 
@@ -187,12 +201,16 @@ async def EditBirthday(event) :
         Birthdays = [f'{i[1]} : {i[2].strftime("%Y/%m/%d")}' for i in cursor]  #i[1] is equal to name and the i[2] is equal to date time and i change the format with strftime
 
         await client.send_message(event.chat_id , '\n'.join(Birthdays))        
-        await client.send_message(event.chat_id , 'choose the name and type the new name \nfor example joe kilie')
+        await client.send_message(event.chat_id , 'choose the name and type with the new name \nfor example joe kilie')
 
 
     elif query_ == 2 : # if the query is equal to 2 , the user choose to change the birthday date 
         Change_Birthday = 1
-        await client.send_message(event.chat_id , 'Type the new data')
+        cursor.execute(f'SELECT * FROM Data WHERE user_id = {event.chat_id}') 
+        Birthdays = [f'{i[1]} : {i[2].strftime("%Y/%m/%d")}' for i in cursor]  #i[1] is equal to name and the i[2] is equal to date time and i change the format with strftime
+
+        await client.send_message(event.chat_id , '\n'.join(Birthdays))        
+        await client.send_message(event.chat_id , "choose the name's birthday date with new birtday\nfor example joe 2009/4/2" )
 
 
 
